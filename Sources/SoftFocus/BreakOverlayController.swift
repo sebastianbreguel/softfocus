@@ -1,7 +1,15 @@
 import AppKit
 
+/// A borderless window normally can't become key, so keystrokes would still reach
+/// the app behind it. Overriding this lets the overlay swallow the keyboard while
+/// the break is up.
+private final class OverlayWindow: NSWindow {
+    override var canBecomeKey: Bool { true }
+}
+
 /// The full-screen "look away" overlay. Covers every display with a dimmed
-/// window, shows a message + live countdown, and a Skip button.
+/// window, shows a message + live countdown, and a Skip button. While it's up it
+/// also blocks app-switching (Cmd-Tab) so you can't sneak back to your tabs.
 final class BreakOverlayController {
     private var windows: [NSWindow] = []
     private var countdownLabels: [NSTextField] = []
@@ -15,7 +23,7 @@ final class BreakOverlayController {
         remaining = duration
 
         for screen in NSScreen.screens {
-            let window = NSWindow(
+            let window = OverlayWindow(
                 contentRect: screen.frame,
                 styleMask: .borderless,
                 backing: .buffered,
@@ -38,6 +46,8 @@ final class BreakOverlayController {
         }
 
         NSApp.activate(ignoringOtherApps: true)
+        // Block Cmd-Tab while the break is up. (Skip stays as the escape hatch.)
+        NSApp.presentationOptions = [.disableProcessSwitching]
         updateCountdownText()
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
@@ -51,6 +61,7 @@ final class BreakOverlayController {
     func hide() {
         timer?.invalidate()
         timer = nil
+        NSApp.presentationOptions = [] // re-enable Cmd-Tab
         windows.forEach { $0.orderOut(nil) }
         windows.removeAll()
         countdownLabels.removeAll()
