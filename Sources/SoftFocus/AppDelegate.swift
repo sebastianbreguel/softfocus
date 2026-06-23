@@ -23,6 +23,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         overlay.onSkip = { [weak self] in self?.scheduler.skipBreak() }
         setupMenuBar()
         startTimers()
+        // Visible proof on launch (and a pointer to the menu-bar icon, which can
+        // hide behind the notch on some Macs).
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            self?.nudges.show("SoftFocus is on — look for 👁 in the menu bar")
+        }
     }
 
     // MARK: - Timers
@@ -72,10 +77,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func setupMenuBar() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem.button?.image = NSImage(
-            systemSymbolName: "eye",
-            accessibilityDescription: "SoftFocus"
-        )
+        if let button = statusItem.button {
+            if let icon = NSImage(systemSymbolName: "eye", accessibilityDescription: "SoftFocus") {
+                button.image = icon
+            } else {
+                button.title = "👁" // fallback so the item is never blank/invisible
+            }
+        }
 
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Take a break now", action: #selector(takeBreakNow), keyEquivalent: ""))
