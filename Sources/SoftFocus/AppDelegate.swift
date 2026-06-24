@@ -25,6 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         overlay.onSkip = { [weak self] in self?.scheduler.skipBreak() }
         overlay.onSnooze = { [weak self] in self?.scheduler.postpone(5 * 60) } // 5 min
+        setupMainMenu()
         setupMenuBar()
         startTimers()
         // Visible proof on launch (and a pointer to the menu-bar icon, which can
@@ -100,6 +101,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSSound(named: "Submarine")?.play()
     }
 
+    // MARK: - Main menu (key equivalents)
+
+    /// A menu-bar (.accessory) app has no standard menu, so ⌘W / ⌘Q / copy-paste
+    /// don't work in its windows. NSApp processes key equivalents against this
+    /// main menu even when the bar isn't shown, so these shortcuts work anyway.
+    private func setupMainMenu() {
+        let mainMenu = NSMenu()
+
+        let appItem = NSMenuItem()
+        mainMenu.addItem(appItem)
+        let appMenu = NSMenu()
+        appMenu.addItem(withTitle: "Quit SoftFocus", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appItem.submenu = appMenu
+
+        let editItem = NSMenuItem()
+        mainMenu.addItem(editItem)
+        let editMenu = NSMenu(title: "Edit")
+        editMenu.addItem(withTitle: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: "Paste", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        editItem.submenu = editMenu
+
+        let windowItem = NSMenuItem()
+        mainMenu.addItem(windowItem)
+        let windowMenu = NSMenu(title: "Window")
+        windowMenu.addItem(withTitle: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        windowItem.submenu = windowMenu
+
+        NSApp.mainMenu = mainMenu
+    }
+
     // MARK: - Menu bar
 
     private func setupMenuBar() {
@@ -137,7 +170,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(.separator())
 
         menu.addItem(item("Settings…", #selector(openSettings), key: ","))
-        menu.addItem(item("Quit SoftFocus", #selector(NSApplication.terminate(_:)), key: "q"))
+        // Quit must target NSApp: terminate(_:) lives on NSApplication, not on us.
+        let quit = item("Quit SoftFocus", #selector(NSApplication.terminate(_:)), key: "q")
+        quit.target = NSApp
+        menu.addItem(quit)
         statusItem.menu = menu
         updateMenuTitle()
     }
