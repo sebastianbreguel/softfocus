@@ -42,25 +42,34 @@ final class NudgeController {
         container.addSubview(label)
         panel.contentView = container
 
-        panel.alphaValue = 0
+        // Honor the system "reduce motion" accessibility setting: no fade.
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        panel.alphaValue = reduceMotion ? 1 : 0
         panel.orderFrontRegardless()
         window = panel
 
-        NSAnimationContext.runAnimationGroup { ctx in
-            ctx.duration = 0.25
-            panel.animator().alphaValue = 1
+        if !reduceMotion {
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.25
+                panel.animator().alphaValue = 1
+            }
         }
 
-        // Hold for ~3s, then fade out.
+        // Hold for ~3s, then dismiss (fade unless reduce-motion is on).
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self, weak panel] in
             guard let panel else { return }
-            NSAnimationContext.runAnimationGroup({ ctx in
-                ctx.duration = 0.25
-                panel.animator().alphaValue = 0
-            }, completionHandler: {
+            let dismiss = {
                 panel.orderOut(nil)
                 if self?.window === panel { self?.window = nil }
-            })
+            }
+            if reduceMotion {
+                dismiss()
+            } else {
+                NSAnimationContext.runAnimationGroup({ ctx in
+                    ctx.duration = 0.25
+                    panel.animator().alphaValue = 0
+                }, completionHandler: dismiss)
+            }
         }
     }
 }

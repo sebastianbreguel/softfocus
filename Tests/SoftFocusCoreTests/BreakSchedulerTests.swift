@@ -67,4 +67,68 @@ final class BreakSchedulerTests: XCTestCase {
         let actions = run(s, seconds: 30, idle: 0)
         XCTAssertEqual(actions.filter { $0 != .none }, [], "Paused scheduler emits nothing")
     }
+
+    func testWarnFiresExactlyOnceBeforeBreak() {
+        let s = BreakScheduler(config: SchedulerConfig(
+            workInterval: 10, breakDuration: 3, idleResetThreshold: 30,
+            naturalPauseIdle: 1.5, maxOverdue: 5, warnSeconds: 3
+        ))
+        // Active the whole time; warn should fire once when timeUntilBreak <= 3s (around t7).
+        let actions = run(s, seconds: 8, idle: 0)
+        XCTAssertEqual(actions.filter { $0 == .warn }.count, 1, "Warn fires once, not every tick")
+    }
+
+    func testEveryNthBreakIsLong() {
+        let s = BreakScheduler(config: SchedulerConfig(
+            workInterval: 3, breakDuration: 2, idleResetThreshold: 30,
+            naturalPauseIdle: 1.5, maxOverdue: 2, longBreakEvery: 2, longBreakDuration: 5
+        ))
+        var longFlags: [Bool] = []
+        var t = 0.0
+        _ = s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 2) // baseline
+        for _ in 0..<40 {
+            t += 1
+            if s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 2) == .startBreak {
+                longFlags.append(s.currentBreakIsLong)
+            }
+        }
+        XCTAssertGreaterThanOrEqual(longFlags.count, 2)
+        XCTAssertEqual(longFlags[0], false, "1st break is short")
+        XCTAssertEqual(longFlags[1], true, "2nd break is long")
+    }
+
+    func testPostponeDelaysTheBreak() {
+        let s = makeScheduler() // 10s work
+        var t = 0.0
+        _ = s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0)
+        for _ in 0..<11 { t += 1; _ = s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0) }
+        s.postpone(5) // push the next break out by 5s
+        XCTAssertEqual(s.timeUntilBreak, 5, accuracy: 0.01)
+        XCTAssertEqual(s.phase, .working)
+        var fired = false
+        for _ in 0..<3 {
+            t += 1
+            if s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0) == .startBreak { fired = true }
+        }
+        XCTAssertFalse(fired, "A postponed break should not fire right away")
+    }
+
+    func testPostponeAddsDelayAndNeverBringsBreakSooner() {
+        let s = makeScheduler() // 10s work
+        _ = s.tick(now: Date(timeIntervalSince1970: 0), idleSeconds: 0) // baseline
+        for i in 1...4 { _ = s.tick(now: Date(timeIntervalSince1970: TimeInterval(i)), idleSeconds: 0) }
+        let before = s.timeUntilBreak // ~6s left after 4s of work
+        s.postpone(3)
+        XCTAssertEqual(s.timeUntilBreak, before + 3, accuracy: 0.01, "Postpone delays; it must not bring the break sooner")
+    }
+
+    func testPauseUntilAutoResumes() {
+        let s = makeScheduler()
+        _ = s.tick(now: Date(timeIntervalSince1970: 0), idleSeconds: 0) // baseline
+        s.pause(until: Date(timeIntervalSince1970: 5))
+        for i in 1...4 { _ = s.tick(now: Date(timeIntervalSince1970: TimeInterval(i)), idleSeconds: 0) }
+        XCTAssertTrue(s.paused, "Still paused before the window elapses")
+        _ = s.tick(now: Date(timeIntervalSince1970: 6), idleSeconds: 0)
+        XCTAssertFalse(s.paused, "Auto-resumes once the pause window passes")
+    }
 }
