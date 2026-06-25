@@ -3,6 +3,23 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+# Generate GoogleConfig.swift from .env so the OAuth secret lives only in .env
+# (gitignored) and the generated file (gitignored), never in committed source.
+CONFIG="Sources/SoftFocus/GoogleConfig.swift"
+if [ -f .env ]; then
+  set -a; . ./.env; set +a
+fi
+cat > "$CONFIG" <<EOF
+// AUTO-GENERATED from .env by build-app.sh. Do not edit or commit.
+import Foundation
+
+enum GoogleConfig {
+    static let clientID = "${GOOGLE_CLIENT_ID:-}"
+    static let clientSecret = "${GOOGLE_CLIENT_SECRET:-}"
+    static var isConfigured: Bool { !clientID.isEmpty && !clientSecret.isEmpty }
+}
+EOF
+
 swift build -c release
 BIN=".build/release/SoftFocus"
 APP="SoftFocus.app"

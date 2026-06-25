@@ -10,8 +10,7 @@ let package = Package(
         // The actual Mac app (AppKit/SwiftUI glue).
         .executableTarget(
             name: "SoftFocus",
-            dependencies: ["SoftFocusCore"],
-            exclude: ["GoogleConfig.swift.example"]
+            dependencies: ["SoftFocusCore"]
         ),
         .testTarget(
             name: "SoftFocusCoreTests",

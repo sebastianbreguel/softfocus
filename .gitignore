@@ -5,3 +5,4 @@ dist/
 .DS_Store
 # Holds the embedded Google OAuth secret — never commit it.
 Sources/SoftFocus/GoogleConfig.swift
+.env
