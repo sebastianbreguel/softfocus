@@ -27,7 +27,19 @@ public final class Settings {
             "soundEnabled": true,
             "tipsEnabled": true,
             "customMessage": "",
+            "meetingAutoDetect": true,
+            "language": "system",
         ])
+    }
+
+    public var language: String {
+        get { defaults.string(forKey: "language") ?? "system" }
+        set { defaults.set(newValue, forKey: "language") }
+    }
+
+    public var meetingAutoDetect: Bool {
+        get { defaults.bool(forKey: "meetingAutoDetect") }
+        set { defaults.set(newValue, forKey: "meetingAutoDetect") }
     }
 
     public var workMinutes: Double {

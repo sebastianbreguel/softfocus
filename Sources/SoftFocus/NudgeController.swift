@@ -6,11 +6,16 @@ import AppKit
 final class NudgeController {
     private var window: NSWindow?
 
-    func show(_ text: String) {
+    /// `heavy` = attention-grabbing variant: red, longer, with a chime.
+    /// `big` = just larger text (heavy implies big).
+    func show(_ text: String, heavy: Bool = false, big: Bool = false) {
         guard let screen = NSScreen.main else { return }
 
+        if heavy { NSSound(named: "Sosumi")?.play() }
+        let large = heavy || big
+
         let label = NSTextField(labelWithString: text)
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: large ? 64 : 20, weight: large ? .bold : .medium)
         label.textColor = .white
         label.alignment = .center
         label.sizeToFit()
@@ -19,7 +24,7 @@ final class NudgeController {
         let size = NSSize(width: label.frame.width + padding * 2, height: label.frame.height + padding)
         let origin = NSPoint(
             x: screen.frame.midX - size.width / 2,
-            y: screen.frame.maxY - size.height - 80
+            y: large ? screen.frame.midY - size.height / 2 : screen.frame.maxY - size.height - 80
         )
 
         let panel = NSPanel(
@@ -36,7 +41,7 @@ final class NudgeController {
 
         let container = NSView(frame: NSRect(origin: .zero, size: size))
         container.wantsLayer = true
-        container.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.8).cgColor
+        container.layer?.backgroundColor = (heavy ? NSColor.systemRed : NSColor.black).withAlphaComponent(0.9).cgColor
         container.layer?.cornerRadius = 12
         label.frame = NSRect(x: padding, y: padding / 2, width: label.frame.width, height: label.frame.height)
         container.addSubview(label)
@@ -56,7 +61,7 @@ final class NudgeController {
         }
 
         // Hold for ~3s, then dismiss (fade unless reduce-motion is on).
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self, weak panel] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + (heavy ? 6 : 3)) { [weak self, weak panel] in
             guard let panel else { return }
             let dismiss = {
                 panel.orderOut(nil)

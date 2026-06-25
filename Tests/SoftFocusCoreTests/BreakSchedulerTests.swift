@@ -131,4 +131,26 @@ final class BreakSchedulerTests: XCTestCase {
         _ = s.tick(now: Date(timeIntervalSince1970: 6), idleSeconds: 0)
         XCTAssertFalse(s.paused, "Auto-resumes once the pause window passes")
     }
+
+    func testMeetingModeFreezesClockAndResumes() {
+        let s = makeScheduler() // 10s work, force at 5s overdue
+        var t = 0.0
+        _ = s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0) // baseline
+        s.inMeeting = true
+        var firedDuringMeeting = false
+        for _ in 0..<30 {
+            t += 1
+            if s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0) == .startBreak { firedDuringMeeting = true }
+        }
+        XCTAssertFalse(firedDuringMeeting, "No breaks during a meeting")
+        XCTAssertEqual(s.timeUntilBreak, 10, accuracy: 0.01, "Work clock frozen during a meeting")
+
+        s.inMeeting = false
+        var firedAfter = false
+        for _ in 0..<20 {
+            t += 1
+            if s.tick(now: Date(timeIntervalSince1970: t), idleSeconds: 0) == .startBreak { firedAfter = true }
+        }
+        XCTAssertTrue(firedAfter, "Breaks resume after the meeting ends")
+    }
 }

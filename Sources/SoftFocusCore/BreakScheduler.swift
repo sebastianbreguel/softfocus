@@ -47,6 +47,9 @@ public final class BreakScheduler {
     public private(set) var phase: BreakPhase = .working
     public var config: SchedulerConfig
     public var paused = false
+    /// While true (e.g. you're in a meeting) the clock freezes and nothing fires.
+    /// Driven externally by the app's meeting detection.
+    public var inMeeting = false
 
     /// Whether the break currently running (or about to) is a long one.
     public private(set) var currentBreakIsLong = false
@@ -77,6 +80,10 @@ public final class BreakScheduler {
         guard let last = lastTick else { return .none } // first tick just sets the baseline
         let delta = now.timeIntervalSince(last)
         if delta <= 0 { return .none }
+
+        // In a meeting: freeze the clock and suppress everything. Work already
+        // accumulated is preserved, so it resumes where it left off afterwards.
+        if inMeeting { return .none }
 
         if paused {
             // Auto-resume once a fixed-duration pause elapses.

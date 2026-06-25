@@ -15,10 +15,10 @@ enum BreakContent {
     ]
 
     static func make(isLong: Bool, custom: String, tipsEnabled: Bool, index: Int) -> (title: String, subtitle: String) {
-        let title = isLong ? "Time to stand up and stretch" : "Look away from your screen"
+        let title = Loc.t(isLong ? "Time to stand up and stretch" : "Look away from your screen")
         let trimmed = custom.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmed.isEmpty { return (title, trimmed) }
-        if tipsEnabled { return (title, tips[((index % tips.count) + tips.count) % tips.count]) }
-        return (title, tips[0])
+        if !trimmed.isEmpty { return (title, trimmed) } // user's own message shown verbatim
+        let tip = tipsEnabled ? tips[((index % tips.count) + tips.count) % tips.count] : tips[0]
+        return (title, Loc.t(tip))
     }
 }

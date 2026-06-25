@@ -19,7 +19,7 @@ final class BreakOverlayController {
     var onSnooze: (() -> Void)?
 
     /// Show the overlay for `duration` seconds (one window per screen).
-    func show(duration: TimeInterval, title: String, subtitle: String) {
+    func show(duration: TimeInterval, title: String, subtitle: String, isLong: Bool) {
         hide() // clear anything stale first
         remaining = duration
 
@@ -42,8 +42,8 @@ final class BreakOverlayController {
             window.setFrame(screen.frame, display: false) // explicit global frame
 
             let label = makeCountdownLabel()
-            label.stringValue = "\(max(0, Int(remaining.rounded())))" // seed before layout so it isn't clipped to width 0
-            let content = makeContentView(in: screen.frame, title: title, subtitle: subtitle, countdown: label, showControls: isMain)
+            label.stringValue = Self.countdownString(max(0, Int(remaining.rounded()))) // seed before layout
+            let content = makeContentView(in: screen.frame, title: title, subtitle: subtitle, isLong: isLong, countdown: label, showControls: isMain)
             window.contentView = content
             window.orderFrontRegardless() // show on every display, even non-active spaces
             if isMain { window.makeKey() } // keyboard focus + buttons on the main one
@@ -79,8 +79,14 @@ final class BreakOverlayController {
 
     // MARK: - View building
 
-    private func makeContentView(in frame: NSRect, title: String, subtitle: String, countdown: NSTextField, showControls: Bool) -> NSView {
+    private func makeContentView(in frame: NSRect, title: String, subtitle: String, isLong: Bool, countdown: NSTextField, showControls: Bool) -> NSView {
         let view = NSView(frame: NSRect(origin: .zero, size: frame.size))
+
+        // Eyebrow badge so the break type (and that a long one is ~minutes) is obvious.
+        let badge = NSTextField(labelWithString: Loc.t(isLong ? "LONG BREAK" : "BREAK"))
+        badge.font = .systemFont(ofSize: 14, weight: .bold)
+        badge.textColor = isLong ? NSColor.systemTeal : NSColor.white.withAlphaComponent(0.5)
+        badge.alignment = .center
 
         let titleLabel = NSTextField(labelWithString: title)
         titleLabel.font = .systemFont(ofSize: 36, weight: .semibold)
@@ -92,17 +98,17 @@ final class BreakOverlayController {
         subtitleLabel.textColor = NSColor.white.withAlphaComponent(0.7)
         subtitleLabel.alignment = .center
 
-        let stack = NSStackView(views: [titleLabel, subtitleLabel, countdown])
+        let stack = NSStackView(views: [badge, titleLabel, subtitleLabel, countdown])
         stack.orientation = .vertical
         stack.alignment = .centerX
         stack.spacing = 16
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         if showControls {
-            let snooze = NSButton(title: "Snooze 5 min", target: self, action: #selector(snoozeTapped))
+            let snooze = NSButton(title: Loc.t("Snooze 5 min"), target: self, action: #selector(snoozeTapped))
             snooze.bezelStyle = .rounded
             snooze.controlSize = .large
-            let skip = NSButton(title: "Skip break", target: self, action: #selector(skipTapped))
+            let skip = NSButton(title: Loc.t("Skip break"), target: self, action: #selector(skipTapped))
             skip.bezelStyle = .rounded
             skip.controlSize = .large
             let buttons = NSStackView(views: [snooze, skip])
@@ -131,8 +137,14 @@ final class BreakOverlayController {
     }
 
     private func updateCountdownText() {
-        let secs = max(0, Int(remaining.rounded()))
-        countdownLabels.forEach { $0.stringValue = "\(secs)" }
+        let text = Self.countdownString(max(0, Int(remaining.rounded())))
+        countdownLabels.forEach { $0.stringValue = text }
+    }
+
+    /// Seconds-only under a minute ("19"); M:SS at or above ("4:56") so long
+    /// breaks read as minutes, not a giant number.
+    static func countdownString(_ secs: Int) -> String {
+        secs >= 60 ? String(format: "%d:%02d", secs / 60, secs % 60) : "\(secs)"
     }
 
     @objc private func skipTapped() {
