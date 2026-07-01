@@ -87,7 +87,7 @@ struct QuickPanelView: View {
             }
             .padding(.vertical, 5).padding(.horizontal, 7)
         }
-        .frame(width: 300)
+        .frame(width: 260)
         .background(
             LinearGradient(colors: [Theme.bgTopC, Theme.bgMidC, Theme.bgBotC],
                            startPoint: .topLeading, endPoint: .bottomTrailing)

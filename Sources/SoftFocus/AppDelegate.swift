@@ -15,7 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var statusItem: NSStatusItem!
     private let panelModel = PanelModel()
-    private var popover: NSPopover?
+    private var quickPanelMenu: NSMenu?
     private var contextMenu: NSMenu?       // right-click fallback (full action set)
     private var tickTimer: Timer?
     private var nudgeTimer: Timer?
@@ -257,21 +257,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func togglePopover() {
-        if let pop = popover, pop.isShown { pop.performClose(nil); return }
-        let pop = NSPopover()
-        pop.behavior = .transient // anchored to the status button, so click-outside dismisses cleanly
-        pop.contentViewController = NSHostingController(rootView: QuickPanelView(model: panelModel))
-        if let button = statusItem.button {
-            updateMenuTitle() // seed live values before showing
-            // Activate first so the status button has a valid key window; otherwise
-            // the popover anchor resolves to the screen corner.
-            NSApp.activate(ignoringOtherApps: true)
-            pop.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-        }
-        popover = pop
+        updateMenuTitle() // seed live values before showing
+
+        // Host the SwiftUI panel INSIDE a native NSMenu (like Docker/Stats do):
+        // the system positions menus perfectly under the icon on every display
+        // and under menu-bar managers (Ice) — manual anchoring never got this right.
+        let menu = NSMenu()
+        let item = NSMenuItem()
+        let hosting = NSHostingView(rootView: QuickPanelView(model: panelModel))
+        hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
+        item.view = hosting
+        menu.addItem(item)
+        quickPanelMenu = menu
+        statusItem.menu = menu
+        statusItem.button?.performClick(nil)
+        statusItem.menu = nil // detach so the next click reaches our action
     }
 
-    private func closePopover() { popover?.performClose(nil) }
+    private func closePopover() { quickPanelMenu?.cancelTracking(); quickPanelMenu = nil }
 
     /// Build (or rebuild, on language change) the dropdown menu.
     private func rebuildMenu() {
