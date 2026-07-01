@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/vambe-design-system-oficial-ae2140fd-f893-4ec3-b203-257056071eae/tokens/fonts.css">
+<style>
+  body { margin:0; font-family:'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  @keyframes sfBreathe { 0%,100% { transform:scale(.8); opacity:.45; } 50% { transform:scale(1.08); opacity:.95; } }
+  .sf { --bg:linear-gradient(160deg,#2c2014,#1a130c 55%,#120c07); --panel:#1e1812; --panel2:#251e16; --pop:#221b14; --track:#3a2f24; --text:#f4ece2; --text2:#b6a493; --text3:#82715f; --border:rgba(255,238,214,0.09); --accent:#e7a468; --accentdim:rgba(231,164,104,0.16); --btn:#e7a468; --btntext:#2a1606; --r:16px; --rsm:12px; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
+</style>
+</helmet>
+
+<div style="position:absolute; left:48px; top:0; width:1500px;">
+  <div style="font:800 30px/1.1 'Plus Jakarta Sans'; color:#1b232e; letter-spacing:-0.02em;">SoftFocus — Estados</div>
+  <div style="font:500 15px/1.5 'Plus Jakarta Sans'; color:#5b6573; margin-top:6px;">Las cuatro pestañas de la app, versión Warm Night · en la navbar, al apretarla, ajustes y break activo.</div>
+</div>
+
+<!-- ===== 1 · EN LA NAVBAR ===== -->
+<div style="position:absolute; left:48px; top:104px; width:840px;">
+  <div data-drags-parent="1" style="margin-bottom:12px; cursor:grab;">
+    <div style="font:700 16px 'Plus Jakarta Sans'; color:#1b232e;">1 · En la navbar</div>
+    <div style="font:500 12.5px 'Plus Jakarta Sans'; color:#6b7280; margin-top:2px;">El estado en reposo — ícono de ojo con la cuenta regresiva al próximo descanso.</div>
+  </div>
+  <div class="sf" style="border-radius:18px; overflow:hidden; box-shadow:0 28px 70px -26px rgba(20,30,50,0.5); border:1px solid rgba(255,255,255,0.06);">
+    <div style="height:38px; display:flex; align-items:center; gap:20px; padding:0 18px; background:rgba(0,0,0,0.34); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);">
+      <span style="display:flex; align-items:center; gap:7px; color:var(--accent);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span style="font:700 13px 'Plus Jakarta Sans'; color:var(--text);">SoftFocus</span></span>
+      <span style="font:500 12.5px 'Plus Jakarta Sans'; color:var(--text2);">File</span>
+      <span style="font:500 12.5px 'Plus Jakarta Sans'; color:var(--text2);">View</span>
+      <span style="font:500 12.5px 'Plus Jakarta Sans'; color:var(--text2);">Help</span>
+      <span style="flex:1;"></span>
+      <span style="font:600 11.5px 'Plus Jakarta Sans'; color:var(--text3); letter-spacing:0.03em;">CPU 13%</span>
+      <span style="color:var(--text2); display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12" y2="20"/></svg></span>
+      <span style="color:var(--text2); display:flex; align-items:center; gap:3px;"><svg width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/><rect x="4" y="9" width="10" height="6" rx="1" fill="currentColor" stroke="none"/></svg></span>
+      <div style="display:flex; align-items:center; gap:7px; padding:4px 11px 4px 9px; background:var(--accentdim); border-radius:999px; color:var(--accent); box-shadow:0 0 0 1px rgba(231,164,104,0.25);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span style="font:700 12px 'Plus Jakarta Sans'; font-variant-numeric:tabular-nums;">16:42</span>
+      </div>
+      <span style="font:500 12px 'Plus Jakarta Sans'; color:var(--text2);">Wed 24 Jun</span>
+      <span style="font:600 12px 'Plus Jakarta Sans'; color:var(--text);">10:36</span>
+    </div>
+    <div style="height:96px; background:var(--bg);"></div>
+  </div>
+</div>
+
+<!-- ===== 2 · AL APRETAR LA NAVBAR ===== -->
+<div style="position:absolute; left:48px; top:330px; width:360px;">
+  <div data-drags-parent="1" style="margin-bottom:12px; cursor:grab;">
+    <div style="font:700 16px 'Plus Jakarta Sans'; color:#1b232e;">2 · Al apretar la navbar</div>
+    <div style="font:500 12.5px 'Plus Jakarta Sans'; color:#6b7280; margin-top:2px;">El menú rápido — descanso ahora, saltar, posponer y accesos.</div>
+  </div>
+  <div class="sf" style="border-radius:18px; overflow:hidden; box-shadow:0 28px 70px -26px rgba(20,30,50,0.5); border:1px solid rgba(255,255,255,0.06); background:var(--bg);">
+    <div style="height:30px; display:flex; align-items:center; justify-content:flex-end; gap:12px; padding:0 12px; background:rgba(0,0,0,0.34);">
+      <span style="font:600 10.5px 'Plus Jakarta Sans'; color:var(--text3);">CPU 13%</span>
+      <div style="display:flex; align-items:center; gap:6px; padding:3px 9px 3px 7px; background:var(--accentdim); border-radius:999px; color:var(--accent); box-shadow:0 0 0 1px rgba(231,164,104,0.25);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span style="font:700 10.5px 'Plus Jakarta Sans'; font-variant-numeric:tabular-nums;">16:42</span></div>
+      <span style="font:600 10.5px 'Plus Jakarta Sans'; color:var(--text);">10:36</span>
+    </div>
+    <div style="padding:12px 14px 18px;">
+      <div style="background:var(--pop); border:1px solid var(--border); border-radius:var(--r); box-shadow:0 24px 56px -16px rgba(0,0,0,0.7); overflow:hidden;">
+        <div style="padding:16px 16px 15px; display:flex; align-items:center; gap:13px; border-bottom:1px solid var(--border);">
+          <div style="position:relative; width:48px; height:48px; flex:none;">
+            <svg width="48" height="48" viewBox="0 0 48 48" style="transform:rotate(-90deg);"><circle cx="24" cy="24" r="20" fill="none" stroke="var(--track)" stroke-width="4"/><circle cx="24" cy="24" r="20" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="125.66" stroke-dashoffset="38"/></svg>
+            <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--accent);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="font:600 14.5px 'Plus Jakarta Sans'; color:var(--text);">Next break in 16:42</div>
+            <div style="font:500 11.5px 'Plus Jakarta Sans'; color:var(--text3); margin-top:2px;">Look 20 ft away · 20 sec</div>
+          </div>
+        </div>
+        <div style="padding:13px;">
+          <div style="display:flex; align-items:center; justify-content:center; gap:9px; padding:12px; border-radius:11px; background:var(--btn); color:var(--btntext);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg><span style="font:600 14px 'Plus Jakarta Sans';">Take a break now</span></div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:10px; border-radius:10px; color:var(--text2);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20"/><line x1="19" y1="5" x2="19" y2="19"/></svg><span style="font:500 12.5px 'Plus Jakarta Sans';">Skip</span></div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:10px; border-radius:10px; color:var(--text2);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span style="font:500 12.5px 'Plus Jakarta Sans';">Snooze 5m</span></div>
+          </div>
+        </div>
+        <div style="height:1px; background:var(--border); margin:2px 13px;"></div>
+        <div style="padding:7px 9px;">
+          <div style="display:flex; align-items:center; gap:11px; padding:9px; border-radius:9px; color:var(--text);"><span style="color:var(--text2); display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span><span style="flex:1; font:500 13px 'Plus Jakarta Sans';">Pause</span></div>
+          <div style="display:flex; align-items:center; gap:11px; padding:9px; border-radius:9px; color:var(--text);"><span style="color:var(--text2); display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4Z"/></svg></span><span style="flex:1; font:500 13px 'Plus Jakarta Sans';">Meeting mode</span></div>
+        </div>
+        <div style="height:1px; background:var(--border); margin:2px 13px;"></div>
+        <div style="padding:7px 9px 9px;">
+          <div style="display:flex; align-items:center; gap:11px; padding:9px; border-radius:9px; color:var(--text2);"><span style="display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l1.5 1.5M19 5l-2 2M7 17l-2 2"/></svg></span><span style="flex:1; font:500 13px 'Plus Jakarta Sans';">Settings…</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3);">⌘,</span></div>
+          <div style="display:flex; align-items:center; gap:11px; padding:9px; border-radius:9px; color:var(--text2);"><span style="display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg></span><span style="flex:1; font:500 13px 'Plus Jakarta Sans';">Quit SoftFocus</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3);">⌘Q</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3 · AJUSTES ===== -->
+<div style="position:absolute; left:468px; top:330px; width:392px;">
+  <div data-drags-parent="1" style="margin-bottom:12px; cursor:grab;">
+    <div style="font:700 16px 'Plus Jakarta Sans'; color:#1b232e;">3 · Ajustes</div>
+    <div style="font:500 12.5px 'Plus Jakarta Sans'; color:#6b7280; margin-top:2px;">Descansos, nudges, generales y calendario.</div>
+  </div>
+  <div class="sf" style="background:var(--panel); border:1px solid var(--border); border-radius:var(--r); box-shadow:0 36px 84px -28px rgba(20,30,50,0.55); overflow:hidden;">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:40px; border-bottom:1px solid var(--border);">
+      <div style="position:absolute; left:14px; display:flex; gap:8px;"><span style="width:11px; height:11px; border-radius:999px; background:#ff5f57;"></span><span style="width:11px; height:11px; border-radius:999px; background:#febc2e;"></span><span style="width:11px; height:11px; border-radius:999px; background:#28c840;"></span></div>
+      <span style="font:600 12.5px 'Plus Jakarta Sans'; color:var(--text2);">Settings</span>
+    </div>
+    <div style="padding:18px; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:42px; height:42px; border-radius:13px; background:var(--accentdim); display:flex; align-items:center; justify-content:center; color:var(--accent);"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div><div style="font:700 16px 'Plus Jakarta Sans'; color:var(--text);">SoftFocus</div><div style="font:500 12px 'Plus Jakarta Sans'; color:var(--text3); margin-top:1px;">Take care of your eyes</div></div>
+      </div>
+
+      <div style="background:var(--panel2); border:1px solid var(--border); border-radius:var(--rsm); padding:15px;">
+        <div style="font:700 10px 'Plus Jakarta Sans'; letter-spacing:0.13em; text-transform:uppercase; color:var(--text3); margin-bottom:13px;">Breaks</div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--text);">Work interval</div><div style="display:flex; align-items:baseline; gap:4px; padding:4px 10px; background:var(--accentdim); border-radius:8px;"><span style="font:700 15px 'Plus Jakarta Sans'; color:var(--accent); font-variant-numeric:tabular-nums;">20</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3);">min</span></div></div>
+        <div style="position:relative; height:6px; border-radius:999px; background:var(--track); margin:11px 0 14px;"><div style="position:absolute; left:0; top:0; bottom:0; width:27%; background:var(--accent); border-radius:999px;"></div><div style="position:absolute; left:27%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:999px; background:#fff; box-shadow:0 1px 5px rgba(0,0,0,0.5);"></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:13px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--text);">Break length</div><div style="display:flex; align-items:baseline; gap:4px; padding:4px 10px; background:var(--accentdim); border-radius:8px;"><span style="font:700 15px 'Plus Jakarta Sans'; color:var(--accent); font-variant-numeric:tabular-nums;">20</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3);">sec</span></div></div>
+        <div style="position:relative; height:6px; border-radius:999px; background:var(--track); margin:11px 0 14px;"><div style="position:absolute; left:0; top:0; bottom:0; width:27%; background:var(--accent); border-radius:999px;"></div><div style="position:absolute; left:27%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:999px; background:#fff; box-shadow:0 1px 5px rgba(0,0,0,0.5);"></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:11px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div><div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--text);">Long break</div><div style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3); margin-top:1px;">Every 6 breaks · 5 min</div></div><div style="width:42px; height:25px; border-radius:999px; background:var(--accent); position:relative; flex:none;"><div style="position:absolute; top:3px; left:20px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+      </div>
+
+      <div style="background:var(--panel2); border:1px solid var(--border); border-radius:var(--rsm); padding:15px;">
+        <div style="font:700 10px 'Plus Jakarta Sans'; letter-spacing:0.13em; text-transform:uppercase; color:var(--text3); margin-bottom:13px;">Nudges</div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--text);">Reminders every</div><div style="display:flex; align-items:baseline; gap:4px; padding:4px 10px; background:var(--accentdim); border-radius:8px;"><span style="font:700 15px 'Plus Jakarta Sans'; color:var(--accent); font-variant-numeric:tabular-nums;">20</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3);">min</span></div></div>
+        <div style="position:relative; height:6px; border-radius:999px; background:var(--track); margin:11px 0 14px;"><div style="position:absolute; left:0; top:0; bottom:0; width:27%; background:var(--accent); border-radius:999px;"></div><div style="position:absolute; left:27%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:999px; background:#fff; box-shadow:0 1px 5px rgba(0,0,0,0.5);"></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:12px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Blink reminders</div><div style="width:42px; height:25px; border-radius:999px; background:var(--track); position:relative; flex:none;"><div style="position:absolute; top:3px; left:3px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:12px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Posture reminders</div><div style="width:42px; height:25px; border-radius:999px; background:var(--accent); position:relative; flex:none;"><div style="position:absolute; top:3px; left:20px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+      </div>
+
+      <div style="background:var(--panel2); border:1px solid var(--border); border-radius:var(--rsm); padding:15px;">
+        <div style="font:700 10px 'Plus Jakarta Sans'; letter-spacing:0.13em; text-transform:uppercase; color:var(--text3); margin-bottom:13px;">General</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Language</div><div style="display:inline-flex; padding:3px; background:var(--track); border-radius:9px; gap:2px;"><span style="font:600 12px 'Plus Jakarta Sans'; color:var(--btntext); background:var(--accent); padding:4px 12px; border-radius:7px;">EN</span><span style="font:600 12px 'Plus Jakarta Sans'; color:var(--text2); padding:4px 12px;">ES</span></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:12px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Pause during meetings</div><div style="width:42px; height:25px; border-radius:999px; background:var(--accent); position:relative; flex:none;"><div style="position:absolute; top:3px; left:20px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:12px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Launch at login</div><div style="width:42px; height:25px; border-radius:999px; background:var(--accent); position:relative; flex:none;"><div style="position:absolute; top:3px; left:20px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+        <div style="height:1px; background:var(--border); margin-bottom:12px;"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="font:500 13.5px 'Plus Jakarta Sans'; color:var(--text);">Chime on break</div><div style="width:42px; height:25px; border-radius:999px; background:var(--accent); position:relative; flex:none;"><div style="position:absolute; top:3px; left:20px; width:19px; height:19px; border-radius:999px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div></div></div>
+        <div style="margin-top:13px; padding:11px 13px; border-radius:9px; background:var(--track); font:500 12.5px 'Plus Jakarta Sans'; color:var(--text3);">Custom break message…</div>
+      </div>
+
+      <div style="background:var(--panel2); border:1px solid var(--border); border-radius:var(--rsm); padding:15px;">
+        <div style="font:700 10px 'Plus Jakarta Sans'; letter-spacing:0.13em; text-transform:uppercase; color:var(--text3); margin-bottom:12px;">Google Calendar</div>
+        <div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; border-radius:999px; background:var(--accent);"></span><span style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--accent);">Connected</span></div><span style="font:600 12.5px 'Plus Jakarta Sans'; color:var(--text2); padding:7px 14px; border-radius:8px; border:1px solid var(--border);">Disconnect</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4 · BREAK ACTIVO ===== -->
+<div style="position:absolute; left:920px; top:330px; width:760px;">
+  <div data-drags-parent="1" style="margin-bottom:12px; cursor:grab;">
+    <div style="font:700 16px 'Plus Jakarta Sans'; color:#1b232e;">4 · Break activo</div>
+    <div style="font:500 12.5px 'Plus Jakarta Sans'; color:#6b7280; margin-top:2px;">Pantalla completa al tocar el descanso — círculo que respira y cuenta regresiva.</div>
+  </div>
+  <div class="sf" style="position:relative; height:476px; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); box-shadow:0 28px 70px -26px rgba(20,30,50,0.5); background:radial-gradient(120% 90% at 50% 34%, #3a2a1a, #14100a 72%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; text-align:center;">
+    <div style="position:relative; width:190px; height:190px; display:flex; align-items:center; justify-content:center;">
+      <span style="position:absolute; width:160px; height:160px; border-radius:999px; background:var(--accent); animation:sfBreathe 5s ease-in-out infinite; filter:blur(2px);"></span>
+      <svg width="190" height="190" viewBox="0 0 190 190" style="position:absolute; transform:rotate(-90deg);"><circle cx="95" cy="95" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/><circle cx="95" cy="95" r="80" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="60"/></svg>
+      <div style="position:relative; display:flex; flex-direction:column; align-items:center; color:var(--text);"><span style="font:700 54px 'Plus Jakarta Sans'; font-variant-numeric:tabular-nums; line-height:1;">18</span><span style="font:500 11px 'Plus Jakarta Sans'; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-top:6px;">seconds</span></div>
+    </div>
+    <div>
+      <div style="font:700 34px 'Plus Jakarta Sans'; color:var(--text); letter-spacing:-0.02em;">Look away</div>
+      <div style="font:500 16px 'Plus Jakarta Sans'; color:var(--text2); margin-top:8px;">Rest your eyes on something about <b style="color:var(--accent); font-weight:700;">20 feet</b> away</div>
+    </div>
+    <div style="display:flex; gap:12px; margin-top:4px;">
+      <div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--text2); padding:11px 22px; border-radius:999px; border:1px solid var(--border);">Skip break</div>
+      <div style="font:600 13.5px 'Plus Jakarta Sans'; color:var(--btntext); background:var(--accent); padding:11px 22px; border-radius:999px;">Postpone 5 min</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

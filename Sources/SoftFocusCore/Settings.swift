@@ -18,7 +18,6 @@ public final class Settings {
             "workMinutes": 20.0,
             "breakSeconds": 20.0,
             "nudgeMinutes": 5.0,
-            "blinkEnabled": true,
             "postureEnabled": true,
             "longBreaksEnabled": true,
             "longBreakEvery": 4.0,
@@ -53,10 +52,6 @@ public final class Settings {
     public var nudgeMinutes: Double {
         get { defaults.double(forKey: "nudgeMinutes") }
         set { defaults.set(newValue, forKey: "nudgeMinutes") }
-    }
-    public var blinkEnabled: Bool {
-        get { defaults.bool(forKey: "blinkEnabled") }
-        set { defaults.set(newValue, forKey: "blinkEnabled") }
     }
     public var postureEnabled: Bool {
         get { defaults.bool(forKey: "postureEnabled") }

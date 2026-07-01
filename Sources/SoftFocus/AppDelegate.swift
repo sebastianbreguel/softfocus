@@ -14,12 +14,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let nudges = NudgeController()
 
     private var statusItem: NSStatusItem!
+    private let panelModel = PanelModel()
+    private var popover: NSPopover?
+    private var contextMenu: NSMenu?       // right-click fallback (full action set)
     private var tickTimer: Timer?
     private var nudgeTimer: Timer?
     private var settingsWindow: NSWindow?
     private var statusMenuItem: NSMenuItem?
     private var pauseItem: NSMenuItem?
-    private var nudgeIsBlink = true
     private var tipIndex = 0
 
     private var manualMeeting = false            // forced on via the menu
@@ -150,13 +152,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func fireNudge() {
         guard scheduler.phase == .working, !scheduler.paused else { return }
-        // Alternate between the two enabled nudge types.
-        if nudgeIsBlink, settings.blinkEnabled {
-            nudges.show(Loc.t("Blink 👀"))
-        } else if settings.postureEnabled {
+        if settings.postureEnabled {
             nudges.show(Loc.t("Sit up straight 🧍"), big: true)
         }
-        nudgeIsBlink.toggle()
     }
 
     /// Show the break overlay with the right duration + content, and chime.
@@ -215,17 +213,65 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
             if let icon = NSImage(systemSymbolName: "eye", accessibilityDescription: "SoftFocus") {
-                button.image = icon
+                // Amber eye to match the design doc (template images would render monochrome).
+                let tinted = icon.withSymbolConfiguration(.init(paletteColors: [Theme.accent]))
+                tinted?.isTemplate = false
+                button.image = tinted ?? icon
             } else {
                 button.title = "👁" // fallback so the item is never blank/invisible
             }
             button.imagePosition = .imageLeading // icon on the left, countdown text on the right
             // Monospaced digits so the menu-bar timer doesn't jitter as numbers change.
             button.font = .monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+            // Left-click → styled quick panel; right-click → full menu.
+            button.target = self
+            button.action = #selector(statusButtonClicked)
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
+        wirePanelModel()
         currentLanguage = settings.language
         rebuildMenu()
     }
+
+    private func wirePanelModel() {
+        panelModel.onTakeBreak = { [weak self] in self?.closePopover(); self?.takeBreakNow() }
+        panelModel.onSkip = { [weak self] in self?.closePopover(); self?.skipBreak() }
+        panelModel.onSnooze = { [weak self] in self?.closePopover(); self?.postponeBreak() }
+        panelModel.onPause = { [weak self] in self?.closePopover(); self?.togglePause() }
+        panelModel.onMeeting = { [weak self] in self?.closePopover(); self?.toggleMeeting() }
+        panelModel.onSettings = { [weak self] in self?.closePopover(); self?.openSettings() }
+        panelModel.onQuit = { NSApp.terminate(nil) }
+    }
+
+    @objc private func statusButtonClicked() {
+        if NSApp.currentEvent?.type == .rightMouseUp {
+            // Show the full menu (includes Pause-for durations, per-meeting override).
+            if let menu = contextMenu {
+                statusItem.menu = menu
+                statusItem.button?.performClick(nil)
+                statusItem.menu = nil // detach so the next left-click reaches our action
+            }
+        } else {
+            togglePopover()
+        }
+    }
+
+    private func togglePopover() {
+        if let pop = popover, pop.isShown { pop.performClose(nil); return }
+        let pop = NSPopover()
+        pop.behavior = .transient // anchored to the status button, so click-outside dismisses cleanly
+        pop.contentViewController = NSHostingController(rootView: QuickPanelView(model: panelModel))
+        if let button = statusItem.button {
+            updateMenuTitle() // seed live values before showing
+            // Activate first so the status button has a valid key window; otherwise
+            // the popover anchor resolves to the screen corner.
+            NSApp.activate(ignoringOtherApps: true)
+            pop.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        }
+        popover = pop
+    }
+
+    private func closePopover() { popover?.performClose(nil) }
 
     /// Build (or rebuild, on language change) the dropdown menu.
     private func rebuildMenu() {
@@ -261,7 +307,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let quit = item(Loc.t("Quit SoftFocus"), #selector(NSApplication.terminate(_:)), key: "q")
         quit.target = NSApp
         menu.addItem(quit)
-        statusItem.menu = menu
+        contextMenu = menu
         updateMenuTitle()
     }
 
@@ -312,14 +358,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             menuText = "\(Loc.t("Next break in")) \(clock)"
             label = clock
         }
-        button.title = "" // ponytail: icon-only menu bar; status lives in tooltip/menu
-        _ = label
+        // State 1 (design doc): amber eye + live countdown next to it.
+        button.title = " " + label
         button.toolTip = menuText
         statusMenuItem?.title = menuText
         pauseItem?.title = Loc.t(scheduler.paused ? "Resume" : "Pause")
         meetingItem?.state = manualMeeting ? .on : .off
         // Only offer the per-meeting override while a calendar meeting is active.
         dontPauseItem?.isEnabled = scheduler.inMeeting && cachedGoogleMeetingEnd != nil && meetingOverrideUntil == nil
+
+        // State 2 (design doc): feed the quick-panel popover.
+        panelModel.bigText = menuText
+        panelModel.subText = "\(Loc.t("Look 20 ft away")) · \(Int(settings.breakSeconds)) \(Loc.t("sec"))"
+        panelModel.paused = scheduler.paused
+        panelModel.meeting = scheduler.inMeeting
+        let total = max(1, settings.workMinutes * 60)
+        panelModel.progress = scheduler.phase == .onBreak ? 1 : min(1, max(0, scheduler.timeUntilBreak / total))
     }
 
     // MARK: - Actions

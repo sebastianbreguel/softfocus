@@ -15,6 +15,15 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .spanish: return "Español"
         }
     }
+
+    /// Compact label for the segmented picker (design doc state 3).
+    var short: String {
+        switch self {
+        case .system: return "SYS"
+        case .english: return "EN"
+        case .spanish: return "ES"
+        }
+    }
 }
 
 /// Tiny in-app localizer. English source text *is* the key; Spanish comes from the
@@ -54,6 +63,7 @@ enum Loc {
         "Settings…": "Ajustes…",
         "Quit SoftFocus": "Salir de SoftFocus",
         "Next break in": "Próximo descanso en",
+        "Look 20 ft away": "Mirá a 6 m",
         "On break": "En descanso",
         "Paused": "En pausa",
         "In a meeting": "En una reunión",
@@ -67,6 +77,8 @@ enum Loc {
         "LONG BREAK": "DESCANSO LARGO",
         "Snooze 5 min": "Posponer 5 min",
         "Break coming up…": "Descanso en breve…",
+        "seconds": "segundos",
+        "remaining": "restante",
         // Tips
         "Rest your eyes. Focus on something far away.": "Descansá los ojos. Mirá algo lejano.",
         "Look about 20 feet away for 20 seconds.": "Mirá a unos 6 metros por 20 segundos.",
@@ -77,7 +89,6 @@ enum Loc {
         "Look out a window if you have one.": "Mirá por una ventana si tenés.",
         "Breathe in slowly, out even slower.": "Inhalá lento, exhalá más lento todavía.",
         // Nudges
-        "Blink 👀": "Parpadeá 👀",
         "Sit up straight 🧍": "Enderezate 🧍",
         "SoftFocus is on — look for 👁 in the menu bar": "SoftFocus está activo — buscá el 👁 en la barra de menú",
         // Settings
@@ -88,18 +99,21 @@ enum Loc {
         "General": "General",
         "Work": "Trabajo",
         "Break": "Descanso",
+        "Work interval": "Intervalo de trabajo",
+        "Break length": "Duración del descanso",
+        "Reminders every": "Recordatorios cada",
         "Long break now and then": "Descanso largo de vez en cuando",
         "Every %d breaks": "Cada %d descansos",
         "Long break": "Descanso largo",
         "Warn me before a break": "Avisarme antes de un descanso",
         "Every": "Cada",
-        "Blink reminders": "Recordatorios de parpadeo",
         "Posture reminders": "Recordatorios de postura",
         "Pause when camera is on (meetings)": "Pausar con la cámara prendida (reuniones)",
         "Launch at login": "Abrir al iniciar sesión",
         "Chime on break": "Sonido en el descanso",
         "Rotating eye-care tips": "Tips rotativos para los ojos",
         "Custom break message (optional)": "Mensaje propio del descanso (opcional)",
+        "Custom break message…": "Mensaje propio del descanso…",
         "Language": "Idioma",
         "System": "Sistema",
         "min": "min",

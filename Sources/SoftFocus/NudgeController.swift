@@ -1,7 +1,7 @@
 import AppKit
 
 /// Small, non-intrusive HUD that fades in near the top of the main screen with a
-/// short reminder ("Blink 👀" / "Sit up straight"), then fades out. No system
+/// short reminder ("Sit up straight"), then fades out. No system
 /// notifications, so it needs no permissions or app bundle identifier.
 final class NudgeController {
     private var window: NSWindow?
