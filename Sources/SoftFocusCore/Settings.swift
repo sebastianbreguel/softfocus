@@ -22,7 +22,6 @@ public final class Settings {
             "longBreaksEnabled": true,
             "longBreakEvery": 4.0,
             "longBreakMinutes": 5.0,
-            "warnEnabled": true,
             "soundEnabled": true,
             "tipsEnabled": true,
             "customMessage": "",
@@ -69,10 +68,6 @@ public final class Settings {
         get { defaults.double(forKey: "longBreakMinutes") }
         set { defaults.set(newValue, forKey: "longBreakMinutes") }
     }
-    public var warnEnabled: Bool {
-        get { defaults.bool(forKey: "warnEnabled") }
-        set { defaults.set(newValue, forKey: "warnEnabled") }
-    }
     public var soundEnabled: Bool {
         get { defaults.bool(forKey: "soundEnabled") }
         set { defaults.set(newValue, forKey: "soundEnabled") }
@@ -86,9 +81,6 @@ public final class Settings {
         set { defaults.set(newValue, forKey: "customMessage") }
     }
 
-    /// Seconds before a break to show the heads-up banner (0 = off).
-    public var warnSeconds: TimeInterval { warnEnabled ? 10 : 0 }
-
     public var schedulerConfig: SchedulerConfig {
         SchedulerConfig(
             workInterval: workMinutes * 60,
@@ -96,7 +88,7 @@ public final class Settings {
             idleResetThreshold: 60,   // away 1 min => count it as rest
             naturalPauseIdle: 1.5,    // pause this brief is enough to slip the break in
             maxOverdue: 120,          // but never delay a due break more than 2 min
-            warnSeconds: warnSeconds,
+            warnSeconds: 0,           // no heads-up banner — breaks just appear
             longBreakEvery: longBreaksEnabled ? Int(longBreakEvery) : 0,
             longBreakDuration: longBreakMinutes * 60
         )

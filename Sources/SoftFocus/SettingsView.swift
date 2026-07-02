@@ -11,7 +11,6 @@ struct SettingsView: View {
     @AppStorage("longBreaksEnabled") private var longBreaksEnabled: Bool = true
     @AppStorage("longBreakEvery") private var longBreakEvery: Double = 4
     @AppStorage("longBreakMinutes") private var longBreakMinutes: Double = 5
-    @AppStorage("warnEnabled") private var warnEnabled: Bool = true
     @AppStorage("soundEnabled") private var soundEnabled: Bool = true
     @AppStorage("tipsEnabled") private var tipsEnabled: Bool = true
     @AppStorage("customMessage") private var customMessage: String = ""
@@ -44,8 +43,6 @@ struct SettingsView: View {
                         }
                         durationRow("Long break", value: $longBreakMinutes, unit: "min", range: 1...30, step: 1)
                     }
-                    divider
-                    toggle("Warn me before a break", $warnEnabled)
                 }
 
                 card("Nudges") {
@@ -102,6 +99,7 @@ struct SettingsView: View {
                             .foregroundStyle(Theme.text2C)
                             .padding(.vertical, 7).padding(.horizontal, 14)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.borderC))
+                            .modifier(Hover())
                         }
                     } else {
                         Text(Loc.t("Pause breaks during calendar meetings."))

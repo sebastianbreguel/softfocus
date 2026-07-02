@@ -18,6 +18,20 @@ final class PanelModel: ObservableObject {
     var onQuit: () -> Void = {}
 }
 
+/// Marks a control on mouse-over: subtle warm highlight (or brightness for filled buttons).
+struct Hover: ViewModifier {
+    var filled = false
+    @State private var over = false
+    func body(content: Content) -> some View {
+        content
+            .background(over && !filled ? Theme.borderC : .clear,
+                        in: RoundedRectangle(cornerRadius: 9))
+            .brightness(over && filled ? 0.07 : 0)
+            .onHover { over = $0 }
+            .animation(.easeOut(duration: 0.12), value: over)
+    }
+}
+
 /// The quick panel popover — mirrors the "Warm Night" design doc: progress ring,
 /// primary "Take a break now" button, Skip / Snooze, and the toggles/links.
 struct QuickPanelView: View {
@@ -63,6 +77,7 @@ struct QuickPanelView: View {
                     .foregroundStyle(Theme.btnTextC)
                 }
                 .buttonStyle(.plain)
+                .modifier(Hover(filled: true))
 
                 HStack(spacing: 8) {
                     secondary("Skip break", "forward.end.fill", action: model.onSkip)
@@ -109,6 +124,7 @@ struct QuickPanelView: View {
             .foregroundStyle(Theme.text2C)
         }
         .buttonStyle(.plain)
+        .modifier(Hover())
     }
 
     private func row(_ title: String, _ icon: String, on: Bool = false, key: String? = nil, action: @escaping () -> Void) -> some View {
@@ -130,5 +146,6 @@ struct QuickPanelView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .modifier(Hover())
     }
 }

@@ -447,5 +447,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow?.center()
         settingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        // Drop first-responder so the first TextField doesn't open pre-selected.
+        DispatchQueue.main.async { [weak self] in self?.settingsWindow?.makeFirstResponder(nil) }
     }
 }
